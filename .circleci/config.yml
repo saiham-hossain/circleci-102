@@ -1,8 +1,22 @@
-version: 2
+version: 2.1
 jobs:
-  build:
-    docker:
-      - image: circleci/node:7.10
+  myjob:
+    parameters:
+      preinstall-foo:
+        type: boolean
+        default: false
+    machine: true
     steps:
-      - checkout
-      - run: adfasdf
+      - run: echo "preinstall is << parameters.preinstall-foo >>"
+      - when:
+          condition: << parameters.preinstall-foo >>
+          steps:
+            - run: echo "preinstall"
+
+workflows:
+  workflow:
+    jobs:
+      - myjob:
+          preinstall-foo: false
+      - myjob:
+          preinstall-foo: true
